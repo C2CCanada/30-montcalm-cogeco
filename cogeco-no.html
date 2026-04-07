@@ -107,20 +107,15 @@
   </div>
 </div>
 
-<!-- Mailchimp silent submission -->
-<iframe name="mc-hidden" style="display:none;"></iframe>
-<form id="mc-form" action="https://us21.list-manage.com/subscribe/post?u=909c9ee1e5cae82141e7db4ad&id=971ff65c75" method="POST" target="mc-hidden" style="display:none;">
-  <input type="hidden" name="EMAIL" id="mc-email">
-  <input type="hidden" name="FNAME" id="mc-fname">
-  <input type="hidden" name="MMERGE6" value="Not at this time">
-  <input type="hidden" name="b_909c9ee1e5cae82141e7db4ad_971ff65c75" value="">
-</form>
+<!-- Record response to Google Sheet -->
 <script>
 (function() {
   var params = new URLSearchParams(window.location.search);
-  document.getElementById('mc-email').value = params.get('EMAIL') || '';
-  document.getElementById('mc-fname').value = params.get('FNAME') || 'Resident';
-  document.getElementById('mc-form').submit();
+  var email = params.get('EMAIL') || '';
+  var fname = params.get('FNAME') || 'Resident';
+  var url = 'https://script.google.com/macros/s/AKfycbwwK3Ux5w4iGPjwU54c4yQmFNt7-txwh9WxmB0Fbz7hci-eDQUS6zVDgKQdOYy7vwfb/exec';
+  url += '?EMAIL=' + encodeURIComponent(email) + '&FNAME=' + encodeURIComponent(fname) + '&RESPONSE=' + encodeURIComponent('Not at this time');
+  fetch(url, { mode: 'no-cors' });
 })();
 </script>
 </body>
