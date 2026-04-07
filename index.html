@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thanks &mdash; 30 Montcalm</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #f4f1ec;
+    font-family: Georgia, 'Times New Roman', serif;
+    color: #1a1a1a;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+  }
+  .wrapper {
+    max-width: 520px;
+    width: 100%;
+  }
+  .card {
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    text-align: center;
+  }
+  .card-top {
+    background: #1c3a2e;
+    padding: 32px 40px 24px;
+  }
+  .card-top .building {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: #8fbfaa;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .checkmark {
+    width: 56px;
+    height: 56px;
+    background: #2e6b4f;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    font-size: 26px;
+    color: #ffffff;
+  }
+  .card-top h1 {
+    font-size: 24px;
+    font-weight: 400;
+    color: #f0ebe3;
+    line-height: 1.3;
+  }
+  .card-body {
+    padding: 32px 40px;
+  }
+  .card-body p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: #2a2a2a;
+    margin-bottom: 16px;
+  }
+  .card-body .note {
+    font-size: 13px;
+    color: #8a8a8a;
+    font-style: italic;
+  }
+  .footer {
+    background: #f0f7f4;
+    padding: 16px 40px;
+    border-top: 1px solid #ddd7cd;
+  }
+  .footer p {
+    font-size: 12px;
+    color: #6a8a7a;
+    line-height: 1.6;
+  }
+  .footer a {
+    color: #1c3a2e;
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="card">
+    <div class="card-top">
+      <div class="building">30 Montcalm &middot; ET Coast Management</div>
+      <div class="checkmark">&#10003;</div>
+      <h1>You&#39;re in &mdash; thanks!</h1>
+    </div>
+    <div class="card-body">
+      <p>We&#39;ve recorded your interest in the Cogeco bundle. We&#39;ll be in touch as things progress.</p>
+      <p class="note">Nothing is being signed or charged at this stage &mdash; this is simply us gauging interest before moving forward.</p>
+    </div>
+    <div class="footer">
+      <p>
+        Questions? <a href="mailto:info@etcoastmanagement.ca">info@etcoastmanagement.ca</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Mailchimp silent submission -->
+<script>
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  var email = params.get('EMAIL') || '';
+  var fname = params.get('FNAME') || 'Resident';
+
+  var url = 'https://us21.list-manage.com/subscribe/post-json?u=909c9ee1e5cae82141e7db4ad&id=971ff65c75&c=?';
+
+  var data = new URLSearchParams({
+    EMAIL: email,
+    FNAME: fname,
+    MMERGE6: 'Yes, I am in',
+    'b_909c9ee1e5cae82141e7db4ad_971ff65c75': ''
+  });
+
+  var script = document.createElement('script');
+  script.src = url + '&' + data.toString();
+  document.body.appendChild(script);
+})();
+</script>
+</body>
+</html>
