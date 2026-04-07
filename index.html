@@ -107,24 +107,19 @@
 </div>
 
 <!-- Mailchimp silent submission -->
+<iframe name="mc-hidden" style="display:none;"></iframe>
+<form id="mc-form" action="https://us21.list-manage.com/subscribe/post?u=909c9ee1e5cae82141e7db4ad&id=971ff65c75" method="POST" target="mc-hidden" style="display:none;">
+  <input type="hidden" name="EMAIL" id="mc-email">
+  <input type="hidden" name="FNAME" id="mc-fname">
+  <input type="hidden" name="MMERGE6" value="Yes, I am in">
+  <input type="hidden" name="b_909c9ee1e5cae82141e7db4ad_971ff65c75" value="">
+</form>
 <script>
 (function() {
   var params = new URLSearchParams(window.location.search);
-  var email = params.get('EMAIL') || '';
-  var fname = params.get('FNAME') || 'Resident';
-
-  var url = 'https://us21.list-manage.com/subscribe/post-json?u=909c9ee1e5cae82141e7db4ad&id=971ff65c75&c=?';
-
-  var data = new URLSearchParams({
-    EMAIL: email,
-    FNAME: fname,
-    MMERGE6: 'Yes, I am in',
-    'b_909c9ee1e5cae82141e7db4ad_971ff65c75': ''
-  });
-
-  var script = document.createElement('script');
-  script.src = url + '&' + data.toString();
-  document.body.appendChild(script);
+  document.getElementById('mc-email').value = params.get('EMAIL') || '';
+  document.getElementById('mc-fname').value = params.get('FNAME') || 'Resident';
+  document.getElementById('mc-form').submit();
 })();
 </script>
 </body>
