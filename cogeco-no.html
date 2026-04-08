@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Thanks &mdash; 30 Montcalm</title>
+<title>Thanks - 30 Montcalm</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -85,6 +85,82 @@
     color: #1c3a2e;
     text-decoration: none;
   }
+
+  /* Name fallback form */
+  .name-form {
+    background: #faf9f7;
+    border: 1px solid #ddd7cd;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    text-align: left;
+  }
+  .name-form label {
+    display: block;
+    font-size: 14px;
+    color: #1c3a2e;
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+  .name-form .form-note {
+    font-size: 12px;
+    color: #8a8a8a;
+    font-style: italic;
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+  .name-form input[type="text"] {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #ddd7cd;
+    border-radius: 6px;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 15px;
+    color: #1a1a1a;
+    margin-bottom: 12px;
+    outline: none;
+  }
+  .name-form input[type="text"]:focus {
+    border-color: #1c3a2e;
+  }
+  .name-form button {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: #c9a227;
+    color: #1a1a1a;
+    border: none;
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .name-form button:hover {
+    background: #b08f20;
+  }
+  .success-msg {
+    display: none;
+    font-size: 14px;
+    color: #1c3a2e;
+    text-align: center;
+    padding: 8px 0;
+  }
+
+  /* Confirmed message */
+  .confirmed-msg {
+    display: none;
+    font-size: 14px;
+    color: #1c3a2e;
+    background: #faf9f7;
+    border: 1px solid #ddd7cd;
+    border-radius: 8px;
+    padding: 14px 20px;
+    margin-bottom: 16px;
+    text-align: center;
+  }
 </style>
 </head>
 <body>
@@ -96,8 +172,23 @@
       <h1>Thanks for letting us know</h1>
     </div>
     <div class="card-body">
-      <p>We&#39;ve noted that you&#39;re not interested at this time &mdash; no problem at all. We appreciate you taking a moment to respond.</p>
-      <p class="note">If you change your mind or have any questions, don&#39;t hesitate to reach out.</p>
+      <p>We've noted that you're not interested at this time. No problem at all. We appreciate you taking a moment to respond.</p>
+
+      <!-- Shown when email was captured automatically -->
+      <div id="confirmed" class="confirmed-msg">
+        &#10003; Your response has been recorded.
+      </div>
+
+      <!-- Shown when email param is missing -->
+      <div id="nameForm" class="name-form" style="display:none;">
+        <label>One quick thing:</label>
+        <p class="form-note">Please let us know your first name so we can match your response to your unit.</p>
+        <input type="text" id="nameInput" placeholder="Your first name" required>
+        <button type="button" id="submitBtn" onclick="submitName()">Submit</button>
+        <p id="successMsg" class="success-msg">&#10003; Got it, thanks!</p>
+      </div>
+
+      <p class="note">If you change your mind or have any questions, don't hesitate to reach out.</p>
     </div>
     <div class="footer">
       <p>
@@ -107,15 +198,48 @@
   </div>
 </div>
 
-<!-- Record response to Google Sheet -->
 <script>
 (function() {
   var params = new URLSearchParams(window.location.search);
-  var email = params.get('EMAIL') || '';
-  var fname = params.get('FNAME') || 'Resident';
-  var url = 'https://script.google.com/macros/s/AKfycbwwK3Ux5w4iGPjwU54c4yQmFNt7-txwh9WxmB0Fbz7hci-eDQUS6zVDgKQdOYy7vwfb/exec';
-  url += '?EMAIL=' + encodeURIComponent(email) + '&FNAME=' + encodeURIComponent(fname) + '&RESPONSE=' + encodeURIComponent('Not at this time');
-  fetch(url, { mode: 'no-cors' });
+  var email = (params.get('EMAIL') || '').trim();
+  var fname = (params.get('FNAME') || '').trim() || 'Resident';
+  var sheetUrl = 'https://script.google.com/macros/s/AKfycbwwK3Ux5w4iGPjwU54c4yQmFNt7-txwh9WxmB0Fbz7hci-eDQUS6zVDgKQdOYy7vwfb/exec';
+
+  // Check if email looks like an unresolved merge tag or is empty
+  if (email && email.indexOf('*|') === -1) {
+    // Email present and valid - submit automatically
+    var url = sheetUrl
+      + '?EMAIL=' + encodeURIComponent(email)
+      + '&FNAME=' + encodeURIComponent(fname)
+      + '&RESPONSE=' + encodeURIComponent('Not at this time');
+    fetch(url, { mode: 'no-cors' });
+    document.getElementById('confirmed').style.display = 'block';
+  } else {
+    // Email missing or unresolved merge tag - ask for first name
+    document.getElementById('nameForm').style.display = 'block';
+  }
+
+  window.submitName = function() {
+    var input = document.getElementById('nameInput');
+    var enteredName = (input.value || '').trim();
+    if (!enteredName) {
+      input.style.borderColor = '#c0392b';
+      input.setAttribute('placeholder', 'Please enter your first name');
+      return;
+    }
+    var url = sheetUrl
+      + '?EMAIL=' + encodeURIComponent('')
+      + '&FNAME=' + encodeURIComponent(enteredName)
+      + '&RESPONSE=' + encodeURIComponent('Not at this time');
+    fetch(url, { mode: 'no-cors' });
+
+    // Show success, hide form fields
+    input.style.display = 'none';
+    document.getElementById('submitBtn').style.display = 'none';
+    document.querySelector('.name-form label').style.display = 'none';
+    document.querySelector('.name-form .form-note').style.display = 'none';
+    document.getElementById('successMsg').style.display = 'block';
+  };
 })();
 </script>
 </body>
